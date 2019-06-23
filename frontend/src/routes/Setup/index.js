@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import _ from 'lodash'
 import classNames from 'classnames'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { COLUMN_TYPE } from '../../consts'
 import ColumnEditor from './ColumnEditor'
 import './Setup.scss'
@@ -27,6 +29,14 @@ export default () => {
         }))
     }
 
+    const newColumn = () => {
+        setColumns([
+            ...columns,
+            { name: 'New column',  type: COLUMN_TYPE.BOOL, price: 50 },
+        ])
+        setSelectedColumnIndex(_.size(columns))
+    }
+
     return (
         <div id="setup" className="route">
             <div className="input-section">
@@ -42,6 +52,9 @@ export default () => {
                             { column.name }
                         </div>
                     ))}
+                    <div className="column-item add-item" onClick={newColumn}>
+                        <FontAwesomeIcon icon={faPlus} />Add Column
+                    </div>
                 </div>
                 <div className="column-props">
                     <ColumnEditor {...columns[selectedColumnIndex]} updateColumn={updateColumn} />
