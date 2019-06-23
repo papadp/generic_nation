@@ -19,13 +19,23 @@ def get_nations():
 
     return nations
 
+@app.route("/api/nations/<int:id>", methods=["GET"])
+@marshal_with(NationSchema)
+def get_nation_by_id(id):
+
+    nation = db.session.query(Nation).filter(Nation.id == id).first()
+
+    logging.error(nation.id)
+    logging.error(nation.name)
+
+    return nation
 
 @app.route("/api/nations", methods=["POST"])
 @use_kwargs({
     "name": fields.String(required=True),
     "columns": fields.List(fields.Dict(), required=True)
 })
-def nations(name, columns):
+def post_nations(name, columns):
     logging.error("CREATE NATION")
 
     n = Nation(name, columns)
