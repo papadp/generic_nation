@@ -16,7 +16,7 @@ services:
   generic_nation:
     restart: always
     image: "generic_nation"
-    command: flask run
+    command: python3 /data/generic_nation/server.py
     environment:
       FLASK_APP: /data/generic_nation/app.py
       FLASK_ENV: development
@@ -25,6 +25,8 @@ services:
       - "5000:5000"
     volumes:
       - "./:/data:rw"
+    depends_on:
+      - "postgres"
 
 volumes:
   postgresdata:
