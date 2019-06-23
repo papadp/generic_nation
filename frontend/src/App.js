@@ -11,6 +11,7 @@ import Setup from './routes/Setup'
 function App() {
   return (
     <div className="App">
+        <header>GENERIC NATION</header>
       <Router>
         <NationSelection path="/" />
         <Setup path="setup" />
