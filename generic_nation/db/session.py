@@ -1,4 +1,4 @@
-from generic_nation.db import nation
+from generic_nation.db import nation, menu_column
 from generic_nation.db import engine, Base
 from sqlalchemy import MetaData
 from sqlalchemy.orm import sessionmaker
