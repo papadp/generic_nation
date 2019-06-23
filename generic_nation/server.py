@@ -64,10 +64,10 @@ def delete_nations(id):
 
 @app.route("/api/nations/<int:id>", methods=["PUT"])
 @use_kwargs({
-    "name": fields.String(required=False),
-    "columns": fields.List(fields.Dict(), required=False)
+    "name": fields.String(missing=''),
+    "columns": fields.List(fields.Dict(), missing=[]),
 })
-def put_nation_by_id(id, name="", columns=None):
+def put_nation_by_id(id, name, columns):
     nation = db.session.query(Nation).filter(Nation.id == id).first()
 
     logging.error(nation.id)
@@ -75,11 +75,13 @@ def put_nation_by_id(id, name="", columns=None):
     if name:
         nation.name = name
         logging.error(nation.name)
+
     if columns:
         nation.columns = columns
+        nation.reset_order()
+        logging.error("HERE ARE THE ROWS %s", nation.order.rows)
         logging.error(nation.columns)
 
-    nation.reset_order()
     db.session.commit()
 
     return "OK", 200
@@ -117,7 +119,7 @@ def put_order_by_nation_by_id(nation_id, rows):
 
     logging.error(rows)
     db.session.commit()
-    
+
     return "OK", 200
 
 @app.route("/api/output/<int:nation_id>", methods=["GET"])
