@@ -1,28 +1,28 @@
 
-.nation-selection .title {
-    color: red;
+.nation-selection {
 }
 
-.nation-selection .nations-list {
+.title {
+
+    color: darkgreen;
+}
+.nations-list {
     display: flex;
     margin: 20px 0;
-    border: 1px solid black;
-    height: 400px;
+    height: 300px;
      flex-wrap: wrap;
 
 }
-
-.nation-selection .nations-list .nation-button {
-    color: red;
+.nations-list .nation-button {
+    color: green;
     display: flex;
-    border: 7px solid deeppink;
+    border: 2px solid black;
     margin: 10px 5px;
-    height: 60px;
+    height: 100px;
     width: 200px;
     justify-content: center;
     align-items: center;
-    max-width: 200px;
-    min-width: 200px;
-
-
+    max-width: 300px;
+    min-width: 300px;
 }
+
