@@ -5,6 +5,7 @@ html {
 body {
   height: 100%;
   text-align: left;
+  background: #499b4a;
 }
 
 input, select {
@@ -22,9 +23,9 @@ input, select {
 
 button {
   cursor: pointer;
-  background: #499b4a;
+  background: black;
   color: white;
-  border: solid 1px lightgray;
+  border: solid 3px white;
   border-radius: 4px;
   padding: 6px 12px;
 }
