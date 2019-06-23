@@ -1,12 +1,18 @@
 .output {
-  display: flex;
+  .output-body {
+    display: flex;
+    margin-top: 10px;
 
-  .text-output {
-    width: 400px;
-    height: 400px;
-    margin-right: 50px;
+    .text-output {
+      width: 400px;
+      height: 400px;
+      margin-right: 50px;
+    }
+
+    .copy-clipboard {
+      height: 50px;
+    }
   }
-  .copy-clipboard {
-    height: 50px;
-  }
+
+
 }
