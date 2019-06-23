@@ -106,6 +106,7 @@ def get_order_by_nation_by_id(nation_id):
 @app.after_request
 def allow_cors(response):
     response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS, PUT, DELETE"
     return response
 
 
