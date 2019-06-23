@@ -96,7 +96,7 @@ def get_order_by_nation_by_id(nation_id):
     nation = db.session.query(Nation).filter(Nation.id == nation_id).first()
 
     order_dict = {
-        "nation": NationSchema().dump(nation),
+        "nation": NationSchema().dump(nation)[0],
         "rows": nation.order.rows
     }
 

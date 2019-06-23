@@ -87,7 +87,9 @@ export default ({ nationId }) => {
                     </div>
                 </div>
                 <div className="column-props">
-                    <ColumnEditor {...columns[selectedColumnIndex]} updateColumn={updateColumn} />
+                    {_.size(columns) > 0 && (
+                        <ColumnEditor {...columns[selectedColumnIndex]} updateColumn={updateColumn} />
+                    )}
                 </div>
             </div>
             <div className="buttons">
