@@ -14,7 +14,7 @@ function App() {
         <header>GENERIC NATION</header>
       <Router>
         <NationSelection path="/" />
-        <Setup path="setup" />
+        <Setup path="setup/:nationId" />
         <Order path="order" />
         <Output path="output" />
       </Router>
