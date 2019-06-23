@@ -1,20 +1,35 @@
 import logging
 
 from generic_nation.app import app, db
-from flask_apispec import use_kwargs
+from flask_apispec import use_kwargs, marshal_with
 from marshmallow import fields
 
 from generic_nation.db.nation import Nation
+from generic_nation.schemas import NationSchema
 
 
 @app.route("/api/nations", methods=["GET"])
-@use_kwargs({
-    "name": fields.String(required=True)
-})
-def nations(name):
-    logging.error("HEY IM HERE")
+@marshal_with(NationSchema(many=True))
+def get_nations():
 
-    n = Nation(name, [])
+    nations = db.session.query(Nation).all()
+
+    for nation in nations:
+        logging.error(nation.name)
+        logging.error(nation.columns)
+
+    return nations
+
+
+@app.route("/api/nations", methods=["POST"])
+@use_kwargs({
+    "name": fields.String(required=True),
+    "columns": fields.List(required=True)
+})
+def nations(name, columns):
+    logging.error("CREATE NATION")
+
+    n = Nation(name, columns)
 
     db.session.add(n)
     db.session.commit()
