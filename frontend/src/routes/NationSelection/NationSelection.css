@@ -4,7 +4,7 @@
 
 .title {
 
-    color: #2c8032;
+    color: black;
 }
 .nations-list {
     display: flex;
@@ -30,6 +30,7 @@
 }
 
 .nations-list .nation-button .nation-order-link {
+    color: white;
     width:300px;
     height:100px;
         display: flex;

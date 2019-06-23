@@ -11,7 +11,9 @@ import Setup from './routes/Setup'
 function App() {
   return (
     <div className="App">
-        <header>GENERIC NATION</header>
+        <Link to={"/"} >
+            <header>GENERIC NATION</header>
+        </Link>
       <Router>
         <NationSelection path="/" />
         <Setup path="setup/:nationId" />
@@ -20,10 +22,6 @@ function App() {
       </Router>
       <div className="footer">
         <nav>
-          <Link to="/">Home</Link> |{" "}
-          <Link to="setup">Setup </Link> |{" "}
-          <Link to="order">Order</Link> |{" "}
-          <Link to="output">Output</Link>
         </nav>
       </div>
     </div>
