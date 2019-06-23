@@ -10,6 +10,21 @@ services:
       - "postgresdata:/var/lib/postgresql/data:delegated"
     healthcheck:
       interval: 30s
+    ports:
+      - "5432:5432"
+
+  generic_nation:
+    restart: always
+    image: "generic_nation"
+    command: flask run
+    environment:
+      FLASK_APP: /data/generic_nation/app.py
+      FLASK_ENV: development
+      PYTHONPATH: /data
+    ports:
+      - "5000:5000"
+    volumes:
+      - "./:/data:rw"
 
 volumes:
   postgresdata:
