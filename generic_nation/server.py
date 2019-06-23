@@ -9,7 +9,7 @@ from generic_nation.db.nation import Nation
 
 @app.route("/api/nations", methods=["GET"])
 @use_kwargs({
-    "name": fields.String(required=True),
+    "name": fields.String(required=True)
 })
 def nations(name):
     logging.error("HEY IM HERE")
