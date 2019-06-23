@@ -18,7 +18,7 @@ function App() {
         <NationSelection path="/" />
         <Setup path="setup/:nationId" />
         <Order path="order" />
-        <Output path="output" />
+        <Output path="output/:nationId" />
       </Router>
       <div className="footer">
         <nav>
