@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import _ from 'lodash'
 import classNames from 'classnames'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { COLUMN_TYPE } from '../../consts'
 import ColumnEditor from './ColumnEditor'
 import './Setup.scss'
@@ -17,15 +19,28 @@ export default () => {
         ] },
     ])
 
+    const save = () => {
+
+    }
+
     const updateColumn = (update) => {
         setColumns(_.map(columns, function(a, i) {
           return i === selectedColumnIndex ? {...a, ...update} : a;
         }))
     }
 
+    const newColumn = () => {
+        setColumns([
+            ...columns,
+            { name: 'New column',  type: COLUMN_TYPE.BOOL, price: 50 },
+        ])
+        setSelectedColumnIndex(_.size(columns))
+    }
+
     return (
         <div id="setup" className="route">
             <div className="input-section">
+                <label>Nation Name</label>
                 <input type="text" value={nationName} onChange={e => setNationName(e.target.value)} />
             </div>
             <div className="columns-editor">
@@ -37,10 +52,16 @@ export default () => {
                             { column.name }
                         </div>
                     ))}
+                    <div className="column-item add-item" onClick={newColumn}>
+                        <FontAwesomeIcon icon={faPlus} />Add Column
+                    </div>
                 </div>
-                <div css={{ flexGrow: 2 }}>
+                <div className="column-props">
                     <ColumnEditor {...columns[selectedColumnIndex]} updateColumn={updateColumn} />
                 </div>
+            </div>
+            <div className="buttons">
+                <button onClick={save}>Save Nation</button>
             </div>
         </div>
     )
