@@ -18,7 +18,10 @@ class Order(Base):
     def reset_order(self):
         logging.error("\n")
         logging.error(self.rows)
+
         for row in self.rows:
             logging.error("\n")
             logging.error(row)
             row['active'] = False
+
+        logging.error(self.rows)

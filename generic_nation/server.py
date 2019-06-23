@@ -79,6 +79,7 @@ def put_nation_by_id(id, name, columns):
     if columns:
         nation.columns = columns
         nation.reset_order()
+        logging.error("HERE ARE THE ROWS %s", nation.order.rows)
         logging.error(nation.columns)
 
     db.session.commit()
