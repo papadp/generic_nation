@@ -1,20 +1,28 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import _ from 'lodash'
 import { COLUMN_TYPE } from '../../consts'
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
+import ColumnEditor from './ColumnEditor'
 
 export default () => {
     const [nationName, setNationName] = useState('')
     const [selectedColumnIndex, setSelectedColumnIndex] = useState(0)
-    const columns = [
+    const [columns, setColumns] = useState([
         { type: COLUMN_TYPE.BOOL, price: 50, name: 'Main Hamin' },
         { type: COLUMN_TYPE.INT, price: 10, name: 'Side Hamin' },
         { type: COLUMN_TYPE.MULTI, name: 'Last Hamin', options: [
                 { name: 'Of', price: 42 },
                 { name: 'Shnitzel', price: 44 },
         ] },
-    ]
+    ])
+
+    const updateColumn = (update) => {
+        setColumns(_.map(columns, function(a, i) {
+          return i === selectedColumnIndex ? {...a, ...update} : a;
+        }))
+    }
+
     return (
         <div id="setup" className="route">
             <div className="input-section">
@@ -39,7 +47,7 @@ export default () => {
                     })}
                 </div>
                 <div css={{ flexGrow: 2 }}>
-                    Column {selectedColumnIndex} props
+                    <ColumnEditor {...columns[selectedColumnIndex]} updateColumn={updateColumn} />
                 </div>
             </div>
         </div>
