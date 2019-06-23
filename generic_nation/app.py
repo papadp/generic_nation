@@ -19,3 +19,4 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
 app_docs = FlaskApiSpec(app)
+
