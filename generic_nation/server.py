@@ -83,6 +83,10 @@ def put_nation_by_id(id, name="", columns=None):
     db.session.commit()
     return "OK", 200
 
+@app.after_request
+def allow_cors(response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, threaded=True)
