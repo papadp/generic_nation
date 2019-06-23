@@ -19,7 +19,6 @@ def reset():
 
 
 class DbSession(object):
-
     active_session = sessionmaker(bind=engine)()
 
     @classmethod
