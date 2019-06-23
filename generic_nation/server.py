@@ -6,6 +6,7 @@ from generic_nation.app import app, db
 from flask_apispec import use_kwargs, marshal_with
 from marshmallow import fields
 
+from generic_nation.consts import MenuColumnType
 from generic_nation.db.nation import Nation
 from generic_nation.db.order import Order
 from generic_nation.menu import Menu
@@ -97,9 +98,38 @@ def put_nation_by_id(id, name, columns):
 def get_order_by_nation_by_id(nation_id):
     nation = db.session.query(Nation).filter(Nation.id == nation_id).first()
 
+    returned_rows = []
+
+    for row in nation.order.rows:
+
+        new_row = row
+        total_price = 0
+
+        for n, value in enumerate(row['values']):
+            # column = nation.columns[n]
+
+            if nation.columns[n]["type"] == MenuColumnType.BOOL.name:
+                if value == True:
+                    total_price += nation.columns[n]["price"]
+
+            elif nation.columns[n]["type"] == MenuColumnType.INT.name:
+                total_price += (value * nation.columns[n]["price"])
+
+            elif nation.columns[n]["type"] == MenuColumnType.MULTI.name:
+
+                for option in nation.columns[n]['options']:
+                    if option["name"] == value:
+                        total_price += option["price"]
+
+            new_row["price"] = total_price
+
+        returned_rows.append(new_row)
+
+        logging.error(row)
+
     order_dict = {
         "nation": NationSchema().dump(nation)[0],
-        "rows": nation.order.rows
+        "rows": returned_rows
     }
 
     logging.error(order_dict)
@@ -134,10 +164,34 @@ def get_output_by_nation_id(nation_id):
     returned_rows = []
 
     for row in nation.order.rows:
+
+        new_row = row
+        total_price = 0
+
+        for n, value in enumerate(row['values']):
+            # column = nation.columns[n]
+
+            if nation.columns[n]["type"] == MenuColumnType.BOOL.name:
+                if value == True:
+                    total_price += nation.columns[n]["price"]
+
+            elif nation.columns[n]["type"] == MenuColumnType.INT.name:
+                total_price += (value * nation.columns[n]["price"])
+
+            elif nation.columns[n]["type"] == MenuColumnType.MULTI.name:
+
+                for option in nation.columns[n]['options']:
+                    if option["name"] == value:
+                        total_price += option["price"]
+
+            new_row["price"] = total_price
+
+        returned_rows.append(new_row)
+
         logging.error(row)
 
     order_dict = {
-        "rows": nation.order.rows
+        "rows": returned_rows
     }
 
     logging.error(order_dict)
