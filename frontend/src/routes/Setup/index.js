@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import _ from 'lodash'
+import classNames from 'classnames'
 import { COLUMN_TYPE } from '../../consts'
-/** @jsx jsx */
-import { jsx } from '@emotion/core'
 import ColumnEditor from './ColumnEditor'
+import './Setup.scss'
 
 export default () => {
     const [nationName, setNationName] = useState('')
@@ -28,23 +28,15 @@ export default () => {
             <div className="input-section">
                 <input type="text" value={nationName} onChange={e => setNationName(e.target.value)} />
             </div>
-            <div css={{
-                display: 'flex',
-            }}>
-                <div css={{ width: 300 }}>
-                    {_.map(columns, (column, i) => {
-                        const css = { cursor: 'pointer' }
-                        if (i === selectedColumnIndex) {
-                            css.backgroundColor = 'pink'
-                        }
-                        return (
-                            <div key={`column-edit-${i}`}
-                                 onClick={() => setSelectedColumnIndex(i)}
-                                 css={css} >
-                                { column.name }
-                            </div>
-                        )
-                    })}
+            <div className="columns-editor">
+                <div className="columns-list">
+                    {_.map(columns, (column, i) => (
+                        <div key={`column-edit-${i}`}
+                             className={classNames("column-item", i === selectedColumnIndex && 'selected')}
+                             onClick={() => setSelectedColumnIndex(i)}>
+                            { column.name }
+                        </div>
+                    ))}
                 </div>
                 <div css={{ flexGrow: 2 }}>
                     <ColumnEditor {...columns[selectedColumnIndex]} updateColumn={updateColumn} />

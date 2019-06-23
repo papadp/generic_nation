@@ -1,16 +1,11 @@
 import React, { Fragment } from 'react'
 import { COLUMN_TYPE } from '../../consts'
-/** @jsx jsx */
-import { jsx } from '@emotion/core'
 
 export default ({ name, type, price, options, updateColumn }) => {
     return (
         <Fragment>
             <div className="input-container">
-                <input type="text" value={name} onChange={e => {
-                    debugger
-                    updateColumn({name: e.target.value})
-                }} />
+                <input type="text" value={name} onChange={e => updateColumn({name: e.target.value})} />
             </div>
             <div className="input-container">
                 <select value={type} onChange={e => updateColumn({type: e.target.value})}>

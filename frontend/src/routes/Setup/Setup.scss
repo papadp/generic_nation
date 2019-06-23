@@ -1,0 +1,21 @@
+
+#setup {
+  .input-section {
+    input {
+      width: 100%;
+    }
+  }
+  .columns-editor {
+    display: flex;
+    .columns-list {
+      width: 300px;
+      .column-item {
+        cursor: pointer;
+        &.selected {
+          background-color: pink;
+        }
+      }
+    }
+  }
+
+}
