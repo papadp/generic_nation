@@ -1,0 +1,18 @@
+version: "2.4"
+
+services:
+  postgres:
+    restart: always
+    image: "postgres:10"
+    environment:
+      POSTGRES_PASSWORD: password_123456
+    volumes:
+      - "postgresdata:/var/lib/postgresql/data:delegated"
+    healthcheck:
+      interval: 30s
+
+volumes:
+  postgresdata:
+    driver: local
+
+
