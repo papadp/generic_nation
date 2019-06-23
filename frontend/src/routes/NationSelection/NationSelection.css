@@ -4,7 +4,7 @@
 
 .title {
 
-    color: black;
+    color: darkorange;
 }
 .nations-list {
     display: flex;
@@ -15,7 +15,7 @@
 }
 .nations-list .nation-button {
     position: relative;
-    color: green;
+    color: yellow;
     display: flex;
     border: 2px solid black;
     margin: 10px 5px;
@@ -45,3 +45,11 @@
         font-size: 1.3rem;
         color: white;
     }
+.nations-list .nation-button .trash-nation-icon {
+    position: absolute;
+    bottom: 5px;
+    right: 5px ;
+    font-size: 1.3rem;
+    color: red;
+    border: black;
+}
