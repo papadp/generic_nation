@@ -1,10 +1,13 @@
 import logging
 
+from flask import jsonify
+
 from generic_nation.app import app, db
 from flask_apispec import use_kwargs, marshal_with
 from marshmallow import fields
 
 from generic_nation.db.nation import Nation
+from generic_nation.db.order import Order
 from generic_nation.schemas import NationSchema
 
 
@@ -47,14 +50,11 @@ def post_nations(name, columns):
     return "OK", 200
 
 
-@app.route("/api/nations", methods=["DELETE"])
-@use_kwargs({
-    "id": fields.Integer(required=True)
-})
+@app.route("/api/nations/<int:id>", methods=["DELETE"])
 def delete_nations(id):
-    n = db.session.query.filter_by(id=id).first()
+    nation = db.session.query(Nation).filter(Nation.id == id).first()
 
-    db.session.delete(n)
+    db.session.delete(nation)
     db.session.commit()
 
     logging.error("RUHAMA DELETE NATION ID: %s" % id)
@@ -63,7 +63,6 @@ def delete_nations(id):
 
 @app.route("/api/nations/<int:id>", methods=["PUT"])
 @use_kwargs({
-    "id": fields.Integer(required=True),
     "name": fields.String(required=False),
     "columns": fields.List(fields.Dict(), required=False)
 })
@@ -79,13 +78,37 @@ def put_nation_by_id(id, name="", columns=None):
         nation.columns = columns
         logging.error(nation.columns)
 
+    nation.reset_order()
     db.session.commit()
+
     return "OK", 200
+
+@app.route("/api/order/<int:nation_id>", methods=["GET"])
+@marshal_with(
+    {
+        'nation': fields.Nested(NationSchema, required=True),
+        'rows': fields.List(fields.Dict(), missing=[])
+    }
+)
+def get_order_by_nation_by_id(nation_id):
+    nation = db.session.query(Nation).filter(Nation.id == nation_id).first()
+
+    order_dict = {
+        "nation": NationSchema().dump(nation),
+        "rows": nation.order.rows
+    }
+
+    logging.error(order_dict)
+
+    return jsonify(order_dict)
+
 
 @app.after_request
 def allow_cors(response):
     response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS, PUT, DELETE"
     return response
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, threaded=True)

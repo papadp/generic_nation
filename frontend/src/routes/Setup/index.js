@@ -1,27 +1,58 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import _ from 'lodash'
 import classNames from 'classnames'
+import { navigate } from "@reach/router"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { COLUMN_TYPE } from '../../consts'
 import { updateInArray } from '../../utils'
 import ColumnEditor from './ColumnEditor'
 import './Setup.scss'
+import axios from "axios";
 
-export default () => {
+export default ({ nationId }) => {
+    const isNewNation = nationId === 'new'
     const [nationName, setNationName] = useState('')
     const [selectedColumnIndex, setSelectedColumnIndex] = useState(0)
-    const [columns, setColumns] = useState([
-        { type: COLUMN_TYPE.BOOL, price: 50, name: 'Main Hamin' },
-        { type: COLUMN_TYPE.INT, price: 10, name: 'Side Hamin' },
-        { type: COLUMN_TYPE.MULTI, name: 'Last Hamin', options: [
-                { name: 'Of', price: 42 },
-                { name: 'Shnitzel', price: 44 },
-        ] },
-    ])
+    const [columns, setColumns] = useState([])
 
-    const save = () => {
+    useEffect(() => {
+        if (isNewNation) return
+        try {
+            const fetchData = async () => {
+                const result = await axios(
+                    `http://127.0.0.1:5000/api/nations/${nationId}`,
+                )
 
+                const nation = result.data
+                setNationName(nation.name)
+                setColumns(nation.columns)
+            }
+            fetchData()
+        } catch (error) {
+            console.error(error)
+        }
+    }, [])
+
+    const save = async () => {
+        const data = { name: nationName, columns }
+        const payload = isNewNation ? {
+            method: 'post',
+            url: 'http://127.0.0.1:5000/api/nations',
+            data,
+            dataType: 'json',
+        } : {
+            method: 'put',
+            url: `http://127.0.0.1:5000/api/nations/${nationId}`,
+            data,
+            dataType: 'json',
+        }
+        try {
+            await axios(payload)
+            navigate('/')
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     const updateColumn = (update) => {
