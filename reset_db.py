@@ -16,8 +16,22 @@ n = Nation("WB nation", [
         "name": "Dodro Haze",
         "type": MenuColumnType.INT.name,
         'price': 75
-    }
+    },
+
 ])
+
+n.order.rows = [
+    {
+        'user': "shraga diggy",
+        'active': True,
+        'values': [5, 15]
+    },
+    {
+        'user': "papad",
+        'active': True,
+        'values': [5, 15]
+    }
+]
 
 session.add(n)
 
