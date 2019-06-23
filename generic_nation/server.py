@@ -47,14 +47,11 @@ def post_nations(name, columns):
     return "OK", 200
 
 
-@app.route("/api/nations", methods=["DELETE"])
-@use_kwargs({
-    "id": fields.Integer(required=True)
-})
+@app.route("/api/nations/<int:id>", methods=["DELETE"])
 def delete_nations(id):
-    n = db.session.query.filter_by(id=id).first()
+    nation = db.session.query(Nation).filter(Nation.id == id).first()
 
-    db.session.delete(n)
+    db.session.delete(nation)
     db.session.commit()
 
     logging.error("RUHAMA DELETE NATION ID: %s" % id)
@@ -63,7 +60,6 @@ def delete_nations(id):
 
 @app.route("/api/nations/<int:id>", methods=["PUT"])
 @use_kwargs({
-    "id": fields.Integer(required=True),
     "name": fields.String(required=False),
     "columns": fields.List(fields.Dict(), required=False)
 })
@@ -79,13 +75,17 @@ def put_nation_by_id(id, name="", columns=None):
         nation.columns = columns
         logging.error(nation.columns)
 
+    nation.reset_order()
     db.session.commit()
+
     return "OK", 200
+
 
 @app.after_request
 def allow_cors(response):
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, threaded=True)

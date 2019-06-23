@@ -18,5 +18,7 @@ class Nation(Base):
     def __init__(self, name, columns):
         self.name = name
         self.columns = columns
+        self.reset_order()
 
+    def reset_order(self):
         self.order = Order()
