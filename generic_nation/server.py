@@ -50,7 +50,7 @@ def post_nations(name, columns):
 @use_kwargs({
     "id": fields.Integer(required=True)
 })
-def nations(id):
+def delete_nations(id):
     n = db.session.query.filter_by(id=id).first()
 
     db.session.delete(n)
