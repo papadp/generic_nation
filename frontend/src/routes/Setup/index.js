@@ -17,6 +17,10 @@ export default () => {
         ] },
     ])
 
+    const save = () => {
+
+    }
+
     const updateColumn = (update) => {
         setColumns(_.map(columns, function(a, i) {
           return i === selectedColumnIndex ? {...a, ...update} : a;
@@ -26,6 +30,7 @@ export default () => {
     return (
         <div id="setup" className="route">
             <div className="input-section">
+                <label>Nation Name</label>
                 <input type="text" value={nationName} onChange={e => setNationName(e.target.value)} />
             </div>
             <div className="columns-editor">
@@ -38,9 +43,12 @@ export default () => {
                         </div>
                     ))}
                 </div>
-                <div css={{ flexGrow: 2 }}>
+                <div className="column-props">
                     <ColumnEditor {...columns[selectedColumnIndex]} updateColumn={updateColumn} />
                 </div>
+            </div>
+            <div className="buttons">
+                <button onClick={save}>Save Nation</button>
             </div>
         </div>
     )
