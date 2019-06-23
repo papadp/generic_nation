@@ -18,6 +18,12 @@
     }
     .column-props {
       flex-grow: 2;
+      .col-option {
+        display: flex;
+        input {
+          width: 50%;
+        }
+      }
     }
   }
   .buttons {

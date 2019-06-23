@@ -23,7 +23,7 @@ def get_nations():
 @app.route("/api/nations", methods=["POST"])
 @use_kwargs({
     "name": fields.String(required=True),
-    "columns": fields.List(required=True)
+    "columns": fields.List(fields.Dict(), required=True)
 })
 def nations(name, columns):
     logging.error("CREATE NATION")

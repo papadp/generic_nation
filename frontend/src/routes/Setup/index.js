@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { COLUMN_TYPE } from '../../consts'
+import { updateInArray } from '../../utils'
 import ColumnEditor from './ColumnEditor'
 import './Setup.scss'
 
@@ -24,9 +25,7 @@ export default () => {
     }
 
     const updateColumn = (update) => {
-        setColumns(_.map(columns, function(a, i) {
-          return i === selectedColumnIndex ? {...a, ...update} : a;
-        }))
+        setColumns(updateInArray(columns, selectedColumnIndex, update))
     }
 
     const newColumn = () => {

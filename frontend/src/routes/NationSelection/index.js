@@ -13,15 +13,7 @@ export default ({nations}) => {
                     <NationSelectButton nation={nation} />
                 )}
                 <NationCreationButton/>
-                <NationCreationButton/>
-                <NationCreationButton/>
-                <NationCreationButton/>
-                <NationCreationButton/>
-                <NationCreationButton/>
-                <NationCreationButton/>
-                <NationCreationButton/>
-                <NationCreationButton/>
-                <NationCreationButton/>
+
             </div>
 
         </div>
