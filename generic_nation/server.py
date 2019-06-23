@@ -1,10 +1,13 @@
 import logging
 
+from flask import jsonify
+
 from generic_nation.app import app, db
 from flask_apispec import use_kwargs, marshal_with
 from marshmallow import fields
 
 from generic_nation.db.nation import Nation
+from generic_nation.db.order import Order
 from generic_nation.schemas import NationSchema
 
 
@@ -79,6 +82,25 @@ def put_nation_by_id(id, name="", columns=None):
     db.session.commit()
 
     return "OK", 200
+
+@app.route("/api/order/<int:nation_id>", methods=["GET"])
+@marshal_with(
+    {
+        'nation': fields.Nested(NationSchema, required=True),
+        'rows': fields.List(fields.Dict(), missing=[])
+    }
+)
+def get_order_by_nation_by_id(nation_id):
+    nation = db.session.query(Nation).filter(Nation.id == nation_id).first()
+
+    order_dict = {
+        "nation": NationSchema().dump(nation),
+        "rows": nation.order.rows
+    }
+
+    logging.error(order_dict)
+
+    return jsonify(order_dict)
 
 
 @app.after_request

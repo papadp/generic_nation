@@ -54,6 +54,19 @@ n = Nation("Yom tov Nation", [
     }
 ])
 
+n.order.rows = [
+    {
+        'user': 'Ruhama Cohen',
+        'active': True,
+        'values': ['Haze Of', 'Bacon']
+    },
+    {
+        'user': 'Bet Resh',
+        'active': False,
+        'values': ['Schnitzel', 'Bacon']
+    }
+]
+
 session.add(n)
 session.commit()
 
