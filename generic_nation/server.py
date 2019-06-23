@@ -67,7 +67,6 @@ def delete_nations(id):
     "name": fields.String(required=False),
     "columns": fields.List(fields.Dict(), required=False)
 })
-@marshal_with(NationSchema)
 def put_nation_by_id(id, name="", columns=None):
     nation = db.session.query(Nation).filter(Nation.id == id).first()
 
