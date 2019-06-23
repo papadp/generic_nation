@@ -32,13 +32,22 @@ export default ({ nationId }) => {
     }
   }, [])
 
-  let outputText = 'Please order:\n'
+  let outputText = 'Please order for each user:\n'
   _.map(output.rows, row => {
     if (row.active) {
       outputText += _.join(row.values)
       outputText += ' for ' + row.user
       outputText += ' in price of ' + row.price + '\n'
     }
+  })
+
+  outputText += '\n\nThe order in total is:\n'
+  _.map(output.columns, col => {
+    _.map(col, (value, key) => {
+      outputText += value['amount'] + ' ' + key
+      outputText += ' in price of ' + value['price'] + '\n'
+    })
+
   })
 
   return (
