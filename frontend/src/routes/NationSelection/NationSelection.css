@@ -14,6 +14,7 @@
 
 }
 .nations-list .nation-button {
+    position: relative;
     color: green;
     display: flex;
     border: 2px solid black;
@@ -24,5 +25,22 @@
     align-items: center;
     max-width: 300px;
     min-width: 300px;
+    padding: 0;
+
 }
 
+.nations-list .nation-button .nation-order-link {
+    width:300px;
+    height:100px;
+        display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nations-list .nation-button .edit-nation-icon {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        font-size: 1.3rem;
+        color: white;
+    }
