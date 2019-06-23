@@ -19,16 +19,17 @@ def get_nations():
 
     return nations
 
+
 @app.route("/api/nations/<int:id>", methods=["GET"])
 @marshal_with(NationSchema)
 def get_nation_by_id(id):
-
     nation = db.session.query(Nation).filter(Nation.id == id).first()
 
     logging.error(nation.id)
     logging.error(nation.name)
 
     return nation
+
 
 @app.route("/api/nations", methods=["POST"])
 @use_kwargs({
@@ -57,6 +58,29 @@ def delete_nations(id):
     db.session.commit()
 
     logging.error("RUHAMA DELETE NATION ID: %s" % id)
+    return "OK", 200
+
+
+@app.route("/api/nations/<int:id>", methods=["PUT"])
+@use_kwargs({
+    "id": fields.Integer(required=True),
+    "name": fields.String(required=False),
+    "columns": fields.List(fields.Dict(), required=False)
+})
+@marshal_with(NationSchema)
+def put_nation_by_id(id, name="", columns=None):
+    nation = db.session.query(Nation).filter(Nation.id == id).first()
+
+    logging.error(nation.id)
+
+    if name:
+        nation.name = name
+        logging.error(nation.name)
+    if columns:
+        nation.columns = columns
+        logging.error(nation.columns)
+
+    db.session.commit()
     return "OK", 200
 
 
