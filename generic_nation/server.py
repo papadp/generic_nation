@@ -105,9 +105,9 @@ def get_order_by_nation_by_id(nation_id):
 
 
 @app.route("/api/order/<int:nation_id>", methods=["PUT"])
-@marshal_with(
+@use_kwargs(
     {
-        'rows': fields.List(fields.Dict(), missing=[])
+        'rows': fields.List(fields.Dict(), missing=[], required=False)
     }
 )
 def put_order_by_nation_by_id(nation_id, rows):
@@ -115,7 +115,8 @@ def put_order_by_nation_by_id(nation_id, rows):
     nation.order.rows = rows
 
     logging.error(rows)
-
+    db.session.commit()
+    
     return "OK", 200
 
 
