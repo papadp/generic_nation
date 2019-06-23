@@ -83,6 +83,7 @@ def put_nation_by_id(id, name="", columns=None):
 
     return "OK", 200
 
+
 @app.route("/api/order/<int:nation_id>", methods=["GET"])
 @marshal_with(
     {
@@ -101,6 +102,21 @@ def get_order_by_nation_by_id(nation_id):
     logging.error(order_dict)
 
     return jsonify(order_dict)
+
+
+@app.route("/api/order/<int:nation_id>", methods=["PUT"])
+@marshal_with(
+    {
+        'rows': fields.List(fields.Dict(), missing=[])
+    }
+)
+def put_order_by_nation_by_id(nation_id, rows):
+    nation = db.session.query(Nation).filter(Nation.id == nation_id).first()
+    nation.order.rows = rows
+
+    logging.error(rows)
+
+    return "OK", 200
 
 
 @app.after_request
