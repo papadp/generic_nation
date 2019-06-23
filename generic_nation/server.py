@@ -8,6 +8,7 @@ from marshmallow import fields
 
 from generic_nation.db.nation import Nation
 from generic_nation.db.order import Order
+from generic_nation.menu import Menu
 from generic_nation.schemas import NationSchema
 
 
@@ -119,6 +120,28 @@ def put_order_by_nation_by_id(nation_id, rows):
     db.session.commit()
 
     return "OK", 200
+
+@app.route("/api/output/<int:nation_id>", methods=["GET"])
+@marshal_with(
+    {
+        'rows': fields.List(fields.Dict(), missing=[])
+    }
+)
+def get_output_by_nation_id(nation_id):
+    nation = db.session.query(Nation).filter(Nation.id == nation_id).first()
+
+    returned_rows = []
+
+    for row in nation.order.rows:
+        logging.error(row)
+
+    order_dict = {
+        "rows": nation.order.rows
+    }
+
+    logging.error(order_dict)
+
+    return jsonify(order_dict)
 
 
 @app.after_request
