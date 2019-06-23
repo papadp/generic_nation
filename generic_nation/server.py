@@ -11,10 +11,25 @@ from generic_nation.db.nation import Nation
 @use_kwargs({
     "name": fields.String(required=True)
 })
-def nations(name):
+def nations():
     logging.error("HEY IM HERE")
 
-    n = Nation(name, [])
+    nations_in_db = db.session.query(Nation).all
+    for n in nations_in_db:
+        logging.error(n.name)
+
+    return "OK", 200
+
+
+@app.route("/api/nations", methods=["POST"])
+@use_kwargs({
+    "name": fields.String(required=True),
+    "columns": fields.List(required=True)
+})
+def nations(name, columns):
+    logging.error("CREATE NATION")
+
+    n = Nation(name, columns)
 
     db.session.add(n)
     db.session.commit()
