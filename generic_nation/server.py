@@ -1,4 +1,6 @@
 import logging
+import os
+
 import slack
 from flask import jsonify
 
@@ -6,7 +8,7 @@ from generic_nation.app import app, db
 from flask_apispec import use_kwargs, marshal_with
 from marshmallow import fields
 
-from generic_nation.consts import MenuColumnType, SLACK_TOKEN
+from generic_nation.consts import MenuColumnType
 from generic_nation.db.nation import Nation
 from generic_nation.schemas import NationSchema
 
@@ -282,15 +284,13 @@ def post_chat(nation_id, user, message):
     }
 )
 def send_msg_to_slack(msg):
-    client = slack.WebClient(token=SLACK_TOKEN)
+    logging.error(" slack response: " + os.getenv("SLACK_KEY"))
+    client = slack.WebClient(token=os.getenv("SLACK_KEY"))
 
-    response = client.chat_postMessage(
+    client.chat_postMessage(
         channel='CKML2K28H',
         text=msg)
-    logging.error(" slack response: " + response["msg"])
 
-    assert response["ok"]
-    assert response["message"]["text"] == msg
     return "OK", 200
 
 
