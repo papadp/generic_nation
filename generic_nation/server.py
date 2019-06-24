@@ -97,7 +97,22 @@ def put_nation_by_id(id, name, columns):
 def get_order_by_nation_by_id(nation_id):
     nation = db.session.query(Nation).filter(Nation.id == nation_id).first()
 
+
     returned_rows = []
+    column_aggregations = []
+
+    for column in nation.columns:
+        if column["type"] == MenuColumnType.MULTI.name:
+
+            aggregation = {}
+
+            for option in column["options"]:
+                aggregation[option["name"]] = {"amount": 0, "price": 0}
+
+            column_aggregations.append(aggregation)
+
+        if column["type"] == MenuColumnType.INT.name or column["type"] == MenuColumnType.BOOL.name:
+            column_aggregations.append({"amount": 0, "price": 0})
 
     for row in nation.order.rows:
 
@@ -107,18 +122,30 @@ def get_order_by_nation_by_id(nation_id):
         for n, value in enumerate(row['values']):
             # column = nation.columns[n]
 
+            logging.error(n)
+
             if nation.columns[n]["type"] == MenuColumnType.BOOL.name:
                 if value == True:
                     total_price += nation.columns[n]["price"]
 
+                    column_aggregations[n]["amount"] += 1
+                    column_aggregations[n]["price"] += nation.columns[n]["price"]
+
             elif nation.columns[n]["type"] == MenuColumnType.INT.name:
-                total_price += (value * nation.columns[n]["price"]) 
+                total_price += (value * nation.columns[n]["price"])
+
+                column_aggregations[n]["price"] += price
+                column_aggregations[n]["amount"] += value
 
             elif nation.columns[n]["type"] == MenuColumnType.MULTI.name:
 
                 for option in nation.columns[n]['options']:
                     if option["name"] == value:
                         total_price += option["price"]
+
+                        column_aggregations[n][value]["price"] += option["price"]
+                        column_aggregations[n][value]["amount"] += 1
+
 
             new_row["price"] = total_price
 
@@ -129,7 +156,8 @@ def get_order_by_nation_by_id(nation_id):
     order_dict = {
         "nation": NationSchema().dump(nation)[0],
         "rows": returned_rows,
-        'chat': nation.get_chat_data()
+        'chat': nation.get_chat_data(),
+        "columns": column_aggregations
     }
 
     logging.error(order_dict)
@@ -227,6 +255,7 @@ def get_output_by_nation_id(nation_id):
 
     return jsonify(order_dict)
 
+
 @app.route("/api/chat/<int:nation_id>", methods=["POST"])
 @use_kwargs(
     {
@@ -238,6 +267,7 @@ def post_chat(nation_id, user, message):
     nation = db.session.query(Nation).filter(Nation.id == nation_id).first()
 
     nation.add_message(user, message)
+
 
 @app.route("/api/slack/msg", methods=["POST"])
 @use_kwargs(
@@ -251,8 +281,11 @@ def send_msg_to_slack(msg):
     response = client.chat_postMessage(
         channel='CKML2K28H',
         text=msg)
+    logging.error(" slack response: " + response["msg"])
+
     assert response["ok"]
     assert response["message"]["text"] == msg
+    return "OK", 200
 
 
 @app.after_request

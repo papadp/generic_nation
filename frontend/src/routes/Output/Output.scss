@@ -11,8 +11,10 @@
       font-size: 1.2rem;
     }
 
-    .copy-clipboard {
+    .copy-clipboard, .send-slack {
       height: 50px;
+      width: 200px;
+      margin: 0 20px;
     }
   }
 
