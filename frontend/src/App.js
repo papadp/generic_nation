@@ -29,13 +29,9 @@ function App() {
       <Router>
         <NationSelection path="/" />
         <Setup path="setup/:nationId" />
-        <Order path="order/:nationId" />
+        <Order path="order/:nationId" currentUser={user} />
         <Output path="output/:nationId" />
       </Router>
-      <div className="footer">
-        <nav>
-        </nav>
-      </div>
     </div>
   )
 }

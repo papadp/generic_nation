@@ -13,11 +13,12 @@ import { useInterval } from '../../hooks'
 import { Link } from '@reach/router'
 
 
-export default ({ nationId }) => {
+export default ({ nationId, currentUser }) => {
 
     const [nation, setNation] = useState(null)
     const [rows, setRows] = useState([])
     const [focusedCellId, setFocusedCellId] = useState('')
+    const [messages, setMessages] = useState([])
 
     const save = async (newRows) => {
         try {
@@ -173,8 +174,14 @@ export default ({ nationId }) => {
                 const result = await axios(
                     `http://127.0.0.1:5000/api/order/${nationId}`,
                 )
-                const { nation, rows } = result.data
+                const { nation, rows, chat } = result.data
                 setNation(nation)
+                setMessages(chat)
+                // setMessages([
+                //     {user: 'Asaf', message: '121425'},
+                //     {user: 'Asaf', message: '121425sdfsdf'},
+                //     {user: 'Dima', message: 'fksdkljfds'},
+                // ])
                 setRows(!_.isEmpty(rows) ? rows : [getEmptyRow(nation.columns)])
             }
             fetchData()
@@ -216,15 +223,32 @@ export default ({ nationId }) => {
 
     return (
         <div className="route order-page">
-          <h2>{nation.name}</h2>
-            <ReactTable data={processedRows}
-                        columns={columns} showPagination={false} minRows={0} />
-            <div className="column-item add-item" onClick={newRow}>
-                <FontAwesomeIcon icon={faPlus} />Add Row
+            <div className="order-view">
+                <div className="chat">
+                    <div className="messages">
+                        {_.map(messages, ({user, message}, i) => (
+                            <div key={`message-${i}`} className={classNames("message", user === currentUser && 'mine')}>
+                                <b>{user}: </b>{message}
+                            </div>
+                        ))}
+                    </div>
+                    <div className="chat-input">
+                        <input type="text" />
+                    </div>
+
+                </div>
+                <div className="order-table">
+                    <h2>{nation.name}</h2>
+                    <ReactTable data={processedRows}
+                                columns={columns} showPagination={false} minRows={0} />
+                    <div className="column-item add-item" onClick={newRow}>
+                        <FontAwesomeIcon icon={faPlus} />Add Row
+                    </div>
+                    <Link className="output-link"  to={`/output/${nation.id}`}>
+                        Nation Output
+                    </Link>
+                </div>
             </div>
-            <Link className="output-link"  to={`/output/${nation.id}`}>
-                Nation Output
-            </Link>
         </div>
     )
 }
