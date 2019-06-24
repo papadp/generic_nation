@@ -92,7 +92,8 @@ def put_nation_by_id(id, name, columns):
 @marshal_with(
     {
         'nation': fields.Nested(NationSchema, required=True),
-        'rows': fields.List(fields.Dict(), missing=[])
+        'rows': fields.List(fields.Dict(), missing=[]),
+        'chat': fields.List(fields.Dict(), missing=[])
     }
 )
 def get_order_by_nation_by_id(nation_id):
@@ -113,7 +114,7 @@ def get_order_by_nation_by_id(nation_id):
                     total_price += nation.columns[n]["price"]
 
             elif nation.columns[n]["type"] == MenuColumnType.INT.name:
-                total_price += (value * nation.columns[n]["price"])
+                total_price += (value * nation.columns[n]["price"]) 
 
             elif nation.columns[n]["type"] == MenuColumnType.MULTI.name:
 
@@ -129,7 +130,8 @@ def get_order_by_nation_by_id(nation_id):
 
     order_dict = {
         "nation": NationSchema().dump(nation)[0],
-        "rows": returned_rows
+        "rows": returned_rows,
+        'chat': nation.get_chat_data()
     }
 
     logging.error(order_dict)
@@ -228,6 +230,17 @@ def get_output_by_nation_id(nation_id):
 
     return jsonify(order_dict)
 
+@app.route("/api/chat/<int:nation_id>", methods=["POST"])
+@use_kwargs(
+    {
+        'user': fields.String(required=True),
+        'message': fields.String(required=True)
+    }
+)
+def post_chat(nation_id, user, message):
+    nation = db.session.query(Nation).filter(Nation.id == nation_id).first()
+
+    nation.add_message(user, message)
 
 @app.after_request
 def allow_cors(response):
