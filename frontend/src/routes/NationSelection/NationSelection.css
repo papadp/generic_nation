@@ -4,7 +4,7 @@
 
 .title {
 
-    color: darkorange;
+    color: black;
 }
 .nations-list {
     display: flex;
@@ -15,7 +15,7 @@
 }
 .nations-list .nation-button {
     position: relative;
-    color: yellow;
+    color: #03E3A4;
     display: flex;
     border: 2px solid black;
     margin: 10px 5px;
@@ -30,7 +30,7 @@
 }
 
 .nations-list .nation-button .nation-order-link {
-    color: white;
+    color: #03e3a4;
     width:300px;
     height:100px;
         display: flex;
@@ -49,7 +49,6 @@
     position: absolute;
     bottom: 5px;
     right: 5px ;
-    font-size: 1.3rem;
-    color: red;
-    border: black;
+    font-size: 18m;
+
 }

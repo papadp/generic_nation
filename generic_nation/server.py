@@ -1,15 +1,13 @@
 import logging
-
+import slack
 from flask import jsonify
 
 from generic_nation.app import app, db
 from flask_apispec import use_kwargs, marshal_with
 from marshmallow import fields
 
-from generic_nation.consts import MenuColumnType
+from generic_nation.consts import MenuColumnType, SLACK_TOKEN
 from generic_nation.db.nation import Nation
-from generic_nation.db.order import Order
-from generic_nation.menu import Menu
 from generic_nation.schemas import NationSchema
 
 
@@ -92,7 +90,8 @@ def put_nation_by_id(id, name, columns):
 @marshal_with(
     {
         'nation': fields.Nested(NationSchema, required=True),
-        'rows': fields.List(fields.Dict(), missing=[])
+        'rows': fields.List(fields.Dict(), missing=[]),
+        'chat': fields.List(fields.Dict(), missing=[])
     }
 )
 def get_order_by_nation_by_id(nation_id):
@@ -113,7 +112,7 @@ def get_order_by_nation_by_id(nation_id):
                     total_price += nation.columns[n]["price"]
 
             elif nation.columns[n]["type"] == MenuColumnType.INT.name:
-                total_price += (value * nation.columns[n]["price"])
+                total_price += (value * nation.columns[n]["price"]) 
 
             elif nation.columns[n]["type"] == MenuColumnType.MULTI.name:
 
@@ -129,7 +128,8 @@ def get_order_by_nation_by_id(nation_id):
 
     order_dict = {
         "nation": NationSchema().dump(nation)[0],
-        "rows": returned_rows
+        "rows": returned_rows,
+        'chat': nation.get_chat_data()
     }
 
     logging.error(order_dict)
@@ -151,6 +151,7 @@ def put_order_by_nation_by_id(nation_id, rows):
     db.session.commit()
 
     return "OK", 200
+
 
 @app.route("/api/output/<int:nation_id>", methods=["GET"])
 @marshal_with(
@@ -188,7 +189,6 @@ def get_output_by_nation_id(nation_id):
 
             logging.error(n)
 
-
             if nation.columns[n]["type"] == MenuColumnType.BOOL.name:
                 if value == True:
                     total_price += nation.columns[n]["price"]
@@ -212,7 +212,6 @@ def get_output_by_nation_id(nation_id):
                         column_aggregations[n][value]["price"] += option["price"]
                         column_aggregations[n][value]["amount"] += 1
 
-
             new_row["price"] = total_price
 
         returned_rows.append(new_row)
@@ -227,6 +226,33 @@ def get_output_by_nation_id(nation_id):
     logging.error(order_dict)
 
     return jsonify(order_dict)
+
+@app.route("/api/chat/<int:nation_id>", methods=["POST"])
+@use_kwargs(
+    {
+        'user': fields.String(required=True),
+        'message': fields.String(required=True)
+    }
+)
+def post_chat(nation_id, user, message):
+    nation = db.session.query(Nation).filter(Nation.id == nation_id).first()
+
+    nation.add_message(user, message)
+
+@app.route("/api/slack/msg", methods=["POST"])
+@use_kwargs(
+    {
+        'msg': fields.String(required=False)
+    }
+)
+def send_msg_to_slack(msg):
+    client = slack.WebClient(token=SLACK_TOKEN)
+
+    response = client.chat_postMessage(
+        channel='CKML2K28H',
+        text=msg)
+    assert response["ok"]
+    assert response["message"]["text"] == msg
 
 
 @app.after_request
