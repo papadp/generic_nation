@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import _ from 'lodash'
 import axios from "axios"
+import classNames from 'classnames'
 import ReactTable from 'react-table'
 import { updateInArray } from '../../utils'
 import 'react-table/react-table.css'
@@ -49,17 +50,80 @@ export default ({ nationId }) => {
         return _.findIndex(nation.columns, col => col.name === columnName)
     }
 
-    const renderCell = (info) => {
+    const renderCellContent = (info) => {
         const { column, value, index, row } = info
         const { id: columnName, type } = column
         const cellId = `${columnName}-${index}`
         if (columnName === 'user') {
             return (
-                <input type={columnName === 'user' ? "text" : "number"} value={value}
+                <input type="text" value={value}
                        id={cellId}
                        autoFocus={cellId === focusedCellId}
                        onFocus={() => setFocusedCellId(cellId)}
                        onChange={e => updateCell(index, columnName, e.target.value)} />
+            )
+        }
+        if (columnName === 'active') {
+            return (
+                <input type="checkbox" checked={value}
+                       id={cellId}
+                       onChange={e => updateCell(index, columnName, e.target.checked)} />
+            )
+        }
+        if (type === COLUMN_TYPE.INT) {
+            return (
+                <input type="number" value={value}
+                       id={cellId}
+                       autoFocus={cellId === focusedCellId}
+                       onFocus={() => setFocusedCellId(cellId)}
+                       onChange={e => updateCellValue(row, index, columnIndexByName(columnName), e.target.value)} />
+            )
+        }
+        if (type === COLUMN_TYPE.BOOL) {
+            return (
+                <input type="checkbox" checked={value}
+                       id={cellId}
+                       onChange={e => updateCellValue(row, index, columnIndexByName(columnName), e.target.checked)} />
+            )
+        }
+        if (type === COLUMN_TYPE.MULTI) {
+            return (
+                <select value={value} onChange={e => updateCellValue(row, index, columnIndexByName(columnName), e.target.value)}>
+                    {_.map(column.options, (option, i) => (
+                        <option key={`row-${index}-option-${i}`} value={option.name}>{option.name}</option>
+                    ))}
+                </select>
+            )
+        }
+    }
+
+    const renderCell = (info) => {
+        const { column, value, index, row } = info
+        const { id: columnName, type } = column
+        const cellId = `${columnName}-${index}`
+
+        const isCellDisabled = !row.active && columnName !== 'active'
+        return (
+            <div className={classNames("cell")}>
+                {isCellDisabled && (<div className="cover" />)}
+                {renderCellContent(info)}
+            </div>
+        )
+
+        if (columnName === 'user') {
+            return (
+                <input type="text" value={value}
+                       id={cellId}
+                       autoFocus={cellId === focusedCellId}
+                       onFocus={() => setFocusedCellId(cellId)}
+                       onChange={e => updateCell(index, columnName, e.target.value)} />
+            )
+        }
+        if (columnName === 'active') {
+            return (
+                <input type="checkbox" checked={value}
+                       id={cellId}
+                       onChange={e => updateCell(index, columnName, e.target.checked)} />
             )
         }
         if (type === COLUMN_TYPE.INT) {
@@ -90,12 +154,14 @@ export default ({ nationId }) => {
     }
 
     const getColumns = (colDefs) => ([
+        { Header: '', accessor: 'active', Cell: renderCell, width: 50 },
         { Header: 'Name', accessor: 'user', Cell: renderCell },
         ..._.map(colDefs, (col, i) => ({ ...col, Header: col.name, accessor: col.name, Cell: renderCell })),
     ])
 
     const getEmptyRow = (columns) => {
         return {
+            active: true,
             user: '',
             values: _.map(columns, () => '')
         }
@@ -136,7 +202,7 @@ export default ({ nationId }) => {
 
     const processedRows = _.map(rows, row => {
         const { values = [] } = row
-        const colsWithoutUser = _.takeRight(columns, _.size(columns) - 1)
+        const colsWithoutUser = _.takeRight(columns, _.size(columns) - 2)
         const processedValues = _.map(colsWithoutUser, (col, i) => _.size(values) > i ? values[i] : '')
         return {
             ...row,
