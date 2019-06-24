@@ -244,7 +244,7 @@ def post_chat(nation_id, user, message):
 @app.route("/api/slack/msg", methods=["POST"])
 @use_kwargs(
     {
-        'msg': fields.String(required=False)
+        "msg": fields.String(required=True)
     }
 )
 def send_msg_to_slack(msg):
