@@ -40,15 +40,15 @@
 
 .nations-list .nation-button .edit-nation-icon {
         position: absolute;
-        top: 5px;
-        right: 5px;
-        font-size: 1.3rem;
+        top: 12px;
+        right: 15px;
+        font-size: 1rem;
         color: white;
     }
 .nations-list .nation-button .trash-nation-icon {
     position: absolute;
-    bottom: 5px;
-    right: 5px ;
-    font-size: 18m;
+    top: 5px;
+    left: 10px;
+    font-size: 1.3rem;
 
 }
