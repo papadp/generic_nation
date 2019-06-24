@@ -18,7 +18,7 @@ export default ({nation}) => {
           onClick: async () => {
               const payload = {
                   method: 'delete',
-                  url: `http://127.0.0.1:5000/api/nations/${nation.id}`
+                  url: `http://10.68.179.18:5000/api/nations/${nation.id}`
               }
               try {
                   await axios(payload)

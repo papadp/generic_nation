@@ -24,7 +24,7 @@ export default ({ nationId, currentUser }) => {
         try {
             await axios({
                 method: 'put',
-                url: `http://127.0.0.1:5000/api/order/${nationId}`,
+                url: `http://10.68.179.18:5000/api/order/${nationId}`,
                 data: { rows: newRows },
                 dataType: 'json',
             })
@@ -172,7 +172,7 @@ export default ({ nationId, currentUser }) => {
         try {
             const fetchData = async () => {
                 const result = await axios(
-                    `http://127.0.0.1:5000/api/order/${nationId}`,
+                    `http://10.68.179.18:5000/api/order/${nationId}`,
                 )
                 const { nation, rows, chat } = result.data
                 setNation(nation)

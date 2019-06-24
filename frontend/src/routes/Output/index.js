@@ -37,7 +37,7 @@ export default ({ nationId }) => {
           onClick: async () => {
               const payload = {
                   method: 'post',
-                  url: `http://127.0.0.1:5000/api/slack/msg`,
+                  url: `http://10.68.179.18:5000/api/slack/msg`,
                   data: { msg: outputText },
                   dataType: 'json',
               }
@@ -59,14 +59,14 @@ export default ({ nationId }) => {
     try {
       const fetchOutput = async () => {
         const result = await axios(
-          `http://127.0.0.1:5000/api/output/${nationId}`,
+          `http://10.68.179.18:5000/api/output/${nationId}`,
         )
 
         setOutput(result.data)
       }
       const fetchNation = async () => {
         const result = await axios(
-          `http://127.0.0.1:5000/api/nations/${nationId}`,
+          `http://10.68.179.18:5000/api/nations/${nationId}`,
         )
 
         setNation(result.data)
