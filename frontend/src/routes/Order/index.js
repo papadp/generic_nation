@@ -10,6 +10,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
 import {COLUMN_TYPE} from "../../consts";
 import { useInterval } from '../../hooks'
+import { Link } from '@reach/router'
 
 
 export default ({ nationId }) => {
@@ -185,7 +186,7 @@ export default ({ nationId }) => {
     useEffect(fetchRows, [])
 
     useInterval(fetchRows, 3000)
-    
+
     if (_.isNil(nation)) return null
 
     const columns = getColumns(nation.columns)
@@ -214,13 +215,16 @@ export default ({ nationId }) => {
     })
 
     return (
-        <div className="route">
-            <h2>{nation.name}</h2>
+        <div className="route order-page">
+          <h2>{nation.name}</h2>
             <ReactTable data={processedRows}
                         columns={columns} showPagination={false} minRows={0} />
             <div className="column-item add-item" onClick={newRow}>
                 <FontAwesomeIcon icon={faPlus} />Add Row
             </div>
+            <Link className="output-link"  to={`/output/${nation.id}`}>
+                Nation Output
+            </Link>
         </div>
     )
 }
