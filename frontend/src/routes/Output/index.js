@@ -28,8 +28,6 @@ export default ({ nationId }) => {
           outputText += ' in price of ₪' + value['price'] + '\n'
         }
       })
-    //if (col.type === COLUMN_TYPE.INT)
-      debugger
     } else {
       outputText += col['amount'] + ' ' + col['name']
       outputText += ' in price of ₪' + col['price'] + '\n'
