@@ -1,8 +1,11 @@
-.ReactTable .rt-th, .ReactTable .rt-td {
-  padding: 0;
-  input {
-    border-radius: 0;
-    background-color: transparent;
-    color: black;
+.ReactTable {
+  margin-bottom: 10px;
+  .rt-th, .rt-td {
+    padding: 0;
+    input {
+      border-radius: 0;
+      background-color: transparent;
+      color: black;
+    }
   }
 }

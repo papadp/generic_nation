@@ -131,7 +131,7 @@ export default ({ nationId }) => {
 
     return (
         <div className="route">
-            {_.size(rows)} Rows
+            <h2>{nation.name}</h2>
             <ReactTable data={processedRows}
                         columns={columns} showPagination={false} minRows={0} />
             <div className="column-item add-item" onClick={newRow}>
