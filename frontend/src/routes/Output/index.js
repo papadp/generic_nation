@@ -28,7 +28,6 @@ export default ({ nationId }) => {
           outputText += ' in price of ₪' + value['price'] + '\n'
         }
       })
-      debugger
     } else {
       outputText += col['amount'] + ' ' + col['name']
       outputText += ' in price of ₪' + col['price'] + '\n'
