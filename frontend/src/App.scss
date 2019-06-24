@@ -1,3 +1,4 @@
+
 html {
   height: 100%;
 }
@@ -5,7 +6,7 @@ html {
 body {
   height: 100%;
   text-align: left;
-  background: #499b4a;
+  background: #F4F4F4;
 }
 
 input, select {
@@ -23,16 +24,16 @@ input, select {
 
 button {
   cursor: pointer;
-  background: black;
+  background: #2B1B4C;
   color: white;
-  border: solid 3px white;
+  border: 1px solid #2B1B4C;
   border-radius: 4px;
   padding: 6px 12px;
 }
 
 header {
-  background-color: #499b4a;
-  color: white;
+  background-color: black;
+  color: #03E3A4;
   height: 40px;
   display: flex;
   align-items: center;
@@ -58,4 +59,7 @@ header {
   bottom: 0;
   width: 100%;
   height: 60px;
+}
+h3 {
+  color: #03E3A4;
 }

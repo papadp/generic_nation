@@ -25,11 +25,14 @@ services:
       - "5000:5000"
     volumes:
       - "./:/data:rw"
+      - "chatdata:/chatdata"
     depends_on:
       - "postgres"
 
 volumes:
   postgresdata:
+    driver: local
+  chatdata:
     driver: local
 
 

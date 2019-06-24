@@ -37,7 +37,7 @@ export default ({ nationId }) => {
     if (row.active) {
       outputText += _.join(row.values)
       outputText += ' for ' + row.user
-      outputText += ' in price of ' + row.price + '\n'
+      outputText += ' in price of ₪' + row.price + '\n'
     }
   })
 
@@ -45,7 +45,7 @@ export default ({ nationId }) => {
   _.map(output.columns, col => {
     _.map(col, (value, key) => {
       outputText += value['amount'] + ' ' + key
-      outputText += ' in price of ' + value['price'] + '\n'
+      outputText += ' in price of ₪' + value['price'] + '\n'
     })
 
   })

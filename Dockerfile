@@ -13,4 +13,6 @@ RUN pip3 install flask==1.0.2\
                 marshmallow==2.13.3\
                 marshmallow-enum==1.0\
                 psycopg2==2.7.1\
+                filelock\
+                ujson\
                 slackclient==2.0.0
