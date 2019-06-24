@@ -21,7 +21,7 @@ export default ({ nationId }) => {
         try {
             const fetchData = async () => {
                 const result = await axios(
-                    `http://127.0.0.1:5000/api/nations/${nationId}`,
+                    `http://10.68.179.18:5000/api/nations/${nationId}`,
                 )
 
                 const nation = result.data
@@ -38,12 +38,12 @@ export default ({ nationId }) => {
         const data = { name: nationName, columns }
         const payload = isNewNation ? {
             method: 'post',
-            url: 'http://127.0.0.1:5000/api/nations',
+            url: 'http://10.68.179.18:5000/api/nations',
             data,
             dataType: 'json',
         } : {
             method: 'put',
-            url: `http://127.0.0.1:5000/api/nations/${nationId}`,
+            url: `http://10.68.179.18:5000/api/nations/${nationId}`,
             data,
             dataType: 'json',
         }

@@ -13,7 +13,7 @@ export default () => {
         try {
             const fetchData = async () => {
                 const result = await axios(
-                    'http://127.0.0.1:5000/api/nations',
+                    'http://10.68.179.18:5000/api/nations',
                 );
 
                 setNations(result.data);
