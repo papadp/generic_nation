@@ -200,10 +200,12 @@ export default ({ nationId, currentUser }) => {
 
     const newRow = () => {
         const colsWithoutUser = _.takeRight(columns, _.size(columns) - 2)
-        setRows([
+        const newRows = [
             ...rows,
             getEmptyRow(colsWithoutUser),
-        ])
+        ]
+        setRows(newRows)
+        save(newRows)
     }
 
 
