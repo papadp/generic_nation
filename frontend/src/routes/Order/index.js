@@ -176,12 +176,21 @@ export default ({ nationId, currentUser }) => {
                 )
                 const { nation, rows, chat } = result.data
                 setNation(nation)
-                setMessages(chat)
-                // setMessages([
-                //     {user: 'Asaf', message: '121425'},
-                //     {user: 'Asaf', message: '121425sdfsdf'},
-                //     {user: 'Dima', message: 'fksdkljfds'},
-                // ])
+                // setMessages(chat)
+                setMessages([
+                    {user: 'Dima', message: 'So what’s the plan for food?'},
+                    {user: 'Eden', message: 'I will take care of the oder have everyone send in their information'},
+                    {user: 'Vicki', message: 'Hi Guys!!'},
+                    {user: 'Dror', message: 'יש בוטנים'},
+                    {user: 'Dima', message: 'Dror don’t be annoying I’m very hungry'},
+                    {user: 'Eden', message: 'Ordering in 10 minutes'},
+                    {user: 'Vicki', message: 'What are you guys all getting'},
+                    {user: 'Dror', message: 'Bacon with a side of bacon'},
+                    {user: 'Dima', message: 'Dror I’m warring you'},
+                    {user: 'Asaf', message: 'Did you guys order already'},
+                    {user: 'Eden', message: 'Ordering now'},
+                    {user: 'Vicki', message: 'בתאבון'},
+                ])
                 setRows(!_.isEmpty(rows) ? rows : [getEmptyRow(nation.columns)])
             }
             fetchData()
