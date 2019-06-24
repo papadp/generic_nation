@@ -8,6 +8,7 @@ import './Order.scss'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
 import {COLUMN_TYPE} from "../../consts";
+import { useInterval } from '../../hooks'
 
 
 export default ({ nationId }) => {
@@ -16,18 +17,31 @@ export default ({ nationId }) => {
     const [rows, setRows] = useState([])
     const [focusedCellId, setFocusedCellId] = useState('')
 
+    const save = async (newRows) => {
+        try {
+            await axios({
+                method: 'put',
+                url: `http://127.0.0.1:5000/api/order/${nationId}`,
+                data: { rows: newRows },
+                dataType: 'json',
+            })
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     const updateCell = (rowIndex, columnName, value) => {
-        setRows(
-            updateInArray(rows, rowIndex, { [columnName]: value })
-        )
+        const newRows = updateInArray(rows, rowIndex, { [columnName]: value })
+        setRows(newRows)
+        save(newRows)
     }
 
     const updateCellValue = (row, rowIndex, columnIndex, value) => {
         const values = row._original.values
         values[columnIndex] = value
-        setRows(
-            updateInArray(rows, rowIndex, { values })
-        )
+        const newRows = updateInArray(rows, rowIndex, { values })
+        setRows(newRows)
+        save(newRows)
     }
 
     const columnIndexByName = columnName => {
@@ -86,7 +100,7 @@ export default ({ nationId }) => {
         }
     }
 
-    useEffect(() => {
+    const fetchRows = () => {
         try {
             const fetchData = async () => {
                 const result = await axios(
@@ -100,7 +114,11 @@ export default ({ nationId }) => {
         } catch (error) {
             console.error(error)
         }
-    }, [])
+    }
+
+    useEffect(fetchRows, [])
+
+    useInterval(fetchRows, 3000)
     
     if (_.isNil(nation)) return null
 
