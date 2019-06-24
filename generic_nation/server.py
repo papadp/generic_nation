@@ -112,7 +112,7 @@ def get_order_by_nation_by_id(nation_id):
                     total_price += nation.columns[n]["price"]
 
             elif nation.columns[n]["type"] == MenuColumnType.INT.name:
-                total_price += (value * nation.columns[n]["price"]) 
+                total_price += (value * nation.columns[n]["price"])
 
             elif nation.columns[n]["type"] == MenuColumnType.MULTI.name:
 
@@ -227,6 +227,7 @@ def get_output_by_nation_id(nation_id):
 
     return jsonify(order_dict)
 
+
 @app.route("/api/chat/<int:nation_id>", methods=["POST"])
 @use_kwargs(
     {
@@ -238,6 +239,7 @@ def post_chat(nation_id, user, message):
     nation = db.session.query(Nation).filter(Nation.id == nation_id).first()
 
     nation.add_message(user, message)
+
 
 @app.route("/api/slack/msg", methods=["POST"])
 @use_kwargs(
@@ -251,8 +253,11 @@ def send_msg_to_slack(msg):
     response = client.chat_postMessage(
         channel='CKML2K28H',
         text=msg)
+    logging.error(" slack response: " + response["msg"])
+
     assert response["ok"]
     assert response["message"]["text"] == msg
+    return "OK", 200
 
 
 @app.after_request
