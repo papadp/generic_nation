@@ -3,7 +3,8 @@ import _ from 'lodash'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import axios from 'axios'
 import './Output.scss'
-import { confirmAlert } from "react-confirm-alert"
+import { confirmAlert } from 'react-confirm-alert'
+import { COLUMN_TYPE } from '../../consts'
 
 export default ({ nationId }) => {
   const [nation, setNation] = useState({ name: 'Loading' })
@@ -20,53 +21,62 @@ export default ({ nationId }) => {
 
   outputText += '\n\nThe order in total is:\n'
   _.map(output.columns, col => {
-    _.map(col, (value, key) => {
-      outputText += value['amount'] + ' ' + key
-      outputText += ' in price of ₪' + value['price'] + '\n'
-    })
+    if (col.type === COLUMN_TYPE.MULTI) {
+      _.map(col, (value, key) => {
+        if (key !== 'name' && key !== 'type') {
+          outputText += value['amount'] + ' ' + key
+          outputText += ' in price of ₪' + value['price'] + '\n'
+        }
+      })
+    //if (col.type === COLUMN_TYPE.INT)
+      debugger
+    } else {
+      outputText += col['amount'] + ' ' + col['name']
+      outputText += ' in price of ₪' + col['price'] + '\n'
+    }
 
   })
 
   const sendSlack = () => {
-        confirmAlert({
+    confirmAlert({
       title: 'Confirm',
       message: 'Send the nation output to Slack channel #genericnation_msgs ?',
       buttons: [
         {
           label: 'Yes',
           onClick: async () => {
-              const payload = {
-                  method: 'post',
-                  url: `http://127.0.0.1:5000/api/slack/msg`,
-                  data: { msg: outputText },
-                  dataType: 'json',
-              }
-              try {
-                  await axios(payload)
-              } catch (error) {
-                  console.error(error)
-              }
-          }
-    },
+            const payload = {
+              method: 'post',
+              url: `http://10.68.179.18:5000/api/slack/msg`,
+              data: { msg: outputText },
+              dataType: 'json',
+            }
+            try {
+              await axios(payload)
+            } catch (error) {
+              console.error(error)
+            }
+          },
+        },
         {
-          label: 'No'
-        }
-      ]
-    });
-    }
+          label: 'No',
+        },
+      ],
+    })
+  }
 
   useEffect(() => {
     try {
       const fetchOutput = async () => {
         const result = await axios(
-          `http://127.0.0.1:5000/api/output/${nationId}`,
+          `http://10.68.179.18:5000/api/output/${nationId}`,
         )
 
         setOutput(result.data)
       }
       const fetchNation = async () => {
         const result = await axios(
-          `http://127.0.0.1:5000/api/nations/${nationId}`,
+          `http://10.68.179.18:5000/api/nations/${nationId}`,
         )
 
         setNation(result.data)
