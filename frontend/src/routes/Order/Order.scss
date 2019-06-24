@@ -1,6 +1,8 @@
 .order-page{
 
-  .ReactTable .rt-th, .ReactTable .rt-td {
+  .ReactTable {
+  margin-bottom: 10px;
+  .rt-th, .rt-td {
     padding: 0;
     input {
       border-radius: 0;
@@ -8,6 +10,7 @@
       color: black;
     }
   }
+}
 
   .output-link {
     margin-top: 15px;

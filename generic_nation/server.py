@@ -1,15 +1,13 @@
 import logging
-
+import slack
 from flask import jsonify
 
 from generic_nation.app import app, db
 from flask_apispec import use_kwargs, marshal_with
 from marshmallow import fields
 
-from generic_nation.consts import MenuColumnType
+from generic_nation.consts import MenuColumnType, SLACK_TOKEN
 from generic_nation.db.nation import Nation
-from generic_nation.db.order import Order
-from generic_nation.menu import Menu
 from generic_nation.schemas import NationSchema
 
 
@@ -154,6 +152,7 @@ def put_order_by_nation_by_id(nation_id, rows):
 
     return "OK", 200
 
+
 @app.route("/api/output/<int:nation_id>", methods=["GET"])
 @marshal_with(
     {
@@ -190,7 +189,6 @@ def get_output_by_nation_id(nation_id):
 
             logging.error(n)
 
-
             if nation.columns[n]["type"] == MenuColumnType.BOOL.name:
                 if value == True:
                     total_price += nation.columns[n]["price"]
@@ -213,7 +211,6 @@ def get_output_by_nation_id(nation_id):
 
                         column_aggregations[n][value]["price"] += option["price"]
                         column_aggregations[n][value]["amount"] += 1
-
 
             new_row["price"] = total_price
 
@@ -241,6 +238,22 @@ def post_chat(nation_id, user, message):
     nation = db.session.query(Nation).filter(Nation.id == nation_id).first()
 
     nation.add_message(user, message)
+
+@app.route("/api/slack/msg", methods=["POST"])
+@use_kwargs(
+    {
+        'msg': fields.String(required=False)
+    }
+)
+def send_msg_to_slack(msg):
+    client = slack.WebClient(token=SLACK_TOKEN)
+
+    response = client.chat_postMessage(
+        channel='CKML2K28H',
+        text=msg)
+    assert response["ok"]
+    assert response["message"]["text"] == msg
+
 
 @app.after_request
 def allow_cors(response):
