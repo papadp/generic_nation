@@ -5,6 +5,7 @@ import ReactTable from 'react-table'
 import { updateInArray } from '../../utils'
 import 'react-table/react-table.css'
 import './Order.scss'
+import { Link } from '@reach/router'
 
 
 export default ({ nationId }) => {
@@ -64,10 +65,14 @@ export default ({ nationId }) => {
     const columns = getColumns(nation.columns)
 
     return (
-        <div className="route">
+        <div className="route order-page">
             {_.size(rows)} Rows
             <ReactTable data={rows}
                         columns={columns} showPagination={false} minRows={0} />
+
+            <Link className="output-link"  to={`/output/${nation.id}`}>
+                Nation Output
+            </Link>
         </div>
     )
 }

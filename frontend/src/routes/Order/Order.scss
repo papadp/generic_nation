@@ -1,8 +1,15 @@
-.ReactTable .rt-th, .ReactTable .rt-td {
-  padding: 0;
-  input {
-    border-radius: 0;
-    background-color: transparent;
-    color: black;
+.order-page{
+
+  .ReactTable .rt-th, .ReactTable .rt-td {
+    padding: 0;
+    input {
+      border-radius: 0;
+      background-color: transparent;
+      color: black;
+    }
+  }
+
+  .output-link {
+    margin-top: 15px;
   }
 }
