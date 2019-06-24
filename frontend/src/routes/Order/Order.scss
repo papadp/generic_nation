@@ -1,8 +1,35 @@
-.ReactTable .rt-th, .ReactTable .rt-td {
-  padding: 0;
-  input {
-    border-radius: 15px;
-    background-color: transparent;
-    color: black;
+.order-page{
+
+  .ReactTable {
+  margin-bottom: 10px;
+  .rt-th, .rt-td {
+    padding: 0;
+    .cell {
+      position: relative;
+    }
+    .cover {
+      background: gray;
+      position: absolute;
+      opacity: .5;
+      cursor: not-allowed;
+      z-index: 1;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+    input {
+      border-radius: 15px;
+      background-color: transparent;
+      color: black;
+      &[type=checkbox] {
+        height: 25px;
+      }
+    }
+  }
+}
+
+  .output-link {
+    margin-top: 15px;
   }
 }

@@ -70,9 +70,10 @@ export default ({ nationId }) => {
     return (
         <div id="setup" className="route">
             <div className="input-section">
-                <label>Nation Name</label>
+                <h3>Nation Name</h3>
                 <input type="text" value={nationName} onChange={e => setNationName(e.target.value)} />
             </div>
+            <h3>Nation Columns</h3>
             <div className="columns-editor">
                 <div className="columns-list">
                     {_.map(columns, (column, i) => (
