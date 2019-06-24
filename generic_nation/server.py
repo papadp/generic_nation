@@ -108,11 +108,12 @@ def get_order_by_nation_by_id(nation_id):
 
             for option in column["options"]:
                 aggregation[option["name"]] = {"amount": 0, "price": 0}
+                aggregation['type'] = column["type"]
 
             column_aggregations.append(aggregation)
 
         if column["type"] == MenuColumnType.INT.name or column["type"] == MenuColumnType.BOOL.name:
-            column_aggregations.append({"amount": 0, "price": 0})
+            column_aggregations.append({"amount": 0, "price": 0, 'type': column["type"]})
 
     for row in nation.order.rows:
 
@@ -124,6 +125,8 @@ def get_order_by_nation_by_id(nation_id):
 
             logging.error(n)
 
+            column_aggregations[n]['name'] = nation.columns[n]['name']
+
             if nation.columns[n]["type"] == MenuColumnType.BOOL.name:
                 if value == True:
                     total_price += nation.columns[n]["price"]
@@ -132,7 +135,8 @@ def get_order_by_nation_by_id(nation_id):
                     column_aggregations[n]["price"] += nation.columns[n]["price"]
 
             elif nation.columns[n]["type"] == MenuColumnType.INT.name:
-                total_price += (value * nation.columns[n]["price"])
+                price = (value * nation.columns[n]["price"])
+                total_price += price
 
                 column_aggregations[n]["price"] += price
                 column_aggregations[n]["amount"] += value
@@ -145,7 +149,6 @@ def get_order_by_nation_by_id(nation_id):
 
                         column_aggregations[n][value]["price"] += option["price"]
                         column_aggregations[n][value]["amount"] += 1
-
 
             new_row["price"] = total_price
 
@@ -201,11 +204,12 @@ def get_output_by_nation_id(nation_id):
 
             for option in column["options"]:
                 aggregation[option["name"]] = {"amount": 0, "price": 0}
+                aggregation['type'] = column["type"]
 
             column_aggregations.append(aggregation)
 
         if column["type"] == MenuColumnType.INT.name or column["type"] == MenuColumnType.BOOL.name:
-            column_aggregations.append({"amount": 0, "price": 0})
+            column_aggregations.append({"amount": 0, "price": 0, 'type': column["type"]})
 
     for row in nation.order.rows:
 
@@ -216,6 +220,8 @@ def get_output_by_nation_id(nation_id):
             # column = nation.columns[n]
 
             logging.error(n)
+
+            column_aggregations[n]['name'] = nation.columns[n]['name']
 
             if nation.columns[n]["type"] == MenuColumnType.BOOL.name:
                 if value == True:
