@@ -1,13 +1,59 @@
 import React, { useState, useEffect } from 'react'
 import _ from 'lodash'
-import classNames from 'classnames'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import axios from 'axios'
 import './Output.scss'
+import { confirmAlert } from "react-confirm-alert"
 
 export default ({ nationId }) => {
   const [nation, setNation] = useState({ name: 'Loading' })
   const [output, setOutput] = useState({})
+
+  let outputText = 'Please order for each user:\n'
+  _.map(output.rows, row => {
+    if (row.active) {
+      outputText += _.join(row.values)
+      outputText += ' for ' + row.user
+      outputText += ' in price of ₪' + row.price + '\n'
+    }
+  })
+
+  outputText += '\n\nThe order in total is:\n'
+  _.map(output.columns, col => {
+    _.map(col, (value, key) => {
+      outputText += value['amount'] + ' ' + key
+      outputText += ' in price of ₪' + value['price'] + '\n'
+    })
+
+  })
+
+  const sendSlack = () => {
+        confirmAlert({
+      title: 'Confirm',
+      message: 'Send the nation output to Slack channel #genericnation_msgs ?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: async () => {
+              const payload = {
+                  method: 'post',
+                  url: `http://127.0.0.1:5000/api/slack/msg`,
+                  data: { msg: outputText },
+                  dataType: 'json',
+              }
+              try {
+                  await axios(payload)
+              } catch (error) {
+                  console.error(error)
+              }
+          }
+    },
+        {
+          label: 'No'
+        }
+      ]
+    });
+    }
 
   useEffect(() => {
     try {
@@ -32,24 +78,6 @@ export default ({ nationId }) => {
     }
   }, [])
 
-  let outputText = 'Please order for each user:\n'
-  _.map(output.rows, row => {
-    if (row.active) {
-      outputText += _.join(row.values)
-      outputText += ' for ' + row.user
-      outputText += ' in price of ₪' + row.price + '\n'
-    }
-  })
-
-  outputText += '\n\nThe order in total is:\n'
-  _.map(output.columns, col => {
-    _.map(col, (value, key) => {
-      outputText += value['amount'] + ' ' + key
-      outputText += ' in price of ₪' + value['price'] + '\n'
-    })
-
-  })
-
   return (
     <div className="output route">
       <h1>{nation.name} - Output</h1>
@@ -58,6 +86,7 @@ export default ({ nationId }) => {
         <CopyToClipboard text={outputText}>
           <button className="copy-clipboard">Copy to clipboard</button>
         </CopyToClipboard>
+        <button className="send-slack" onClick={sendSlack}>Send to slack</button>
       </div>}
     </div>
   )
